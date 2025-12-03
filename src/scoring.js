@@ -66,7 +66,7 @@ export function checkOverrideFlags(answers, questionsConfig) {
 
             return {
                 isOverride: true,
-                category: "GLP-1 360: EXIT™️",
+                category: question.overrideCategory, // Use the category from the question config (EXIT for Q12, TRANSFORM for Q13, BASE for Q14)
                 triggeredBy: qId,
                 flags: selectedFlags
             };

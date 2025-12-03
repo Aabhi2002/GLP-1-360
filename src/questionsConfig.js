@@ -152,7 +152,7 @@ export const questionsConfig = [
         question: "Select if applicable:",
         type: "multi",
         isOverride: true,
-        overrideCategory: "EXIT",
+        overrideCategory: "GLP-1 360: EXIT™️",
         options: [
             { id: "q12_a", label: "Appetite < 600 kcal/day", score: 0 },
             { id: "q12_b", label: "Planning to stop GLP-1 within 30 days", score: 0 },
@@ -166,7 +166,7 @@ export const questionsConfig = [
         question: "Select if applicable:",
         type: "multi",
         isOverride: true,
-        overrideCategory: "EXIT",
+        overrideCategory: "GLP-1 360: TRANSFORM™️",
         options: [
             { id: "q13_a", label: "Muscle loss > 1.5–2.0 kg on BCA", score: 0 },
             { id: "q13_b", label: "Plateau > 4 weeks", score: 0 },
@@ -181,7 +181,7 @@ export const questionsConfig = [
         question: "Select if applicable:",
         type: "multi",
         isOverride: true,
-        overrideCategory: "EXIT",
+        overrideCategory: "GLP-1 360: BASE™️",
         options: [
             { id: "q14_a", label: "Completely new starter", score: 0 },
             { id: "q14_b", label: "No side effects", score: 0 },

@@ -32,19 +32,19 @@ All three questions have the same text: **"Select if applicable:"**
 ```
 Q1-Q11 (Calculate Score)
     ↓
-Q12 (Critical EXIT Flags)
+Q12 (EXIT Flags)
     ↓
-    ├─ If ANY selected (not None) → EXIT™️ Plan ⚠️
+    ├─ If ANY selected (not None) → EXIT™️ Plan 🔴
     └─ If None → Q13
                   ↓
-                Q13 (Severe Risk Flags)
+                Q13 (TRANSFORM Flags)
                   ↓
-                  ├─ If ANY selected (not None) → EXIT™️ Plan ⚠️
+                  ├─ If ANY selected (not None) → TRANSFORM™️ Plan 🟡
                   └─ If None → Q14
                                 ↓
-                              Q14 (Additional Risk Flags)
+                              Q14 (BASE Flags)
                                 ↓
-                                ├─ If ANY selected (not None) → EXIT™️ Plan ⚠️
+                                ├─ If ANY selected (not None) → BASE™️ Plan 🟢
                                 └─ If None → Score-Based Logic
                                               ↓
                                               0-15 = BASE™️
