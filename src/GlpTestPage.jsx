@@ -11,8 +11,48 @@ function GlpTestPage() {
     const [showContactForm, setShowContactForm] = useState(false);
     const [result, setResult] = useState(null);
 
+    // Determine which questions to show based on override logic
+    const shouldShowQuestion = (index) => {
+        const question = questionsConfig[index];
+
+        // Always show Q1-Q11
+        if (index < 11) return true;
+
+        // Q12 always shows
+        if (question.id === 'q12') return true;
+
+        // Q13 only shows if Q12 is "None"
+        if (question.id === 'q13') {
+            const q12Answer = answers['q12'];
+            if (!q12Answer || q12Answer.length === 0) return true;
+            const q12Question = questionsConfig.find(q => q.id === 'q12');
+            const noneOption = q12Question?.options.find(opt => opt.label === "None");
+            return q12Answer.length === 1 && q12Answer[0] === noneOption?.id;
+        }
+
+        // Q14 only shows if Q12 and Q13 are both "None"
+        if (question.id === 'q14') {
+            const q12Answer = answers['q12'];
+            const q13Answer = answers['q13'];
+
+            const q12Question = questionsConfig.find(q => q.id === 'q12');
+            const q13Question = questionsConfig.find(q => q.id === 'q13');
+            const q12None = q12Question?.options.find(opt => opt.label === "None");
+            const q13None = q13Question?.options.find(opt => opt.label === "None");
+
+            const q12IsNone = q12Answer?.length === 1 && q12Answer[0] === q12None?.id;
+            const q13IsNone = q13Answer?.length === 1 && q13Answer[0] === q13None?.id;
+
+            return q12IsNone && q13IsNone;
+        }
+
+        return true;
+    };
+
     const currentQuestion = questionsConfig[currentQuestionIndex];
-    const isLastQuestion = currentQuestionIndex === questionsConfig.length - 1;
+    const isLastQuestion = currentQuestionIndex === questionsConfig.length - 1 ||
+        (currentQuestionIndex < questionsConfig.length - 1 &&
+            !shouldShowQuestion(currentQuestionIndex + 1));
 
     const handleSingleChoice = (questionId, optionId) => {
         setAnswers(prev => ({
@@ -55,7 +95,17 @@ function GlpTestPage() {
         if (isLastQuestion) {
             setShowContactForm(true);
         } else {
-            setCurrentQuestionIndex(prev => prev + 1);
+            // Find next question that should be shown
+            let nextIndex = currentQuestionIndex + 1;
+            while (nextIndex < questionsConfig.length && !shouldShowQuestion(nextIndex)) {
+                nextIndex++;
+            }
+
+            if (nextIndex >= questionsConfig.length) {
+                setShowContactForm(true);
+            } else {
+                setCurrentQuestionIndex(nextIndex);
+            }
         }
     };
 
@@ -76,14 +126,16 @@ function GlpTestPage() {
         }
 
         const totalScore = calculateScore(answers, questionsConfig);
-        const finalCategory = getFinalCategory(totalScore, [], []);
+        const categoryResult = getFinalCategory(totalScore, answers, questionsConfig);
 
         setResult({
             answers,
             totalScore,
-            baseCategory: finalCategory,
-            finalCategory,
-            triggeredFlags: [],
+            baseCategory: categoryResult.category,
+            finalCategory: categoryResult.category,
+            isOverride: categoryResult.isOverride,
+            triggeredBy: categoryResult.triggeredBy,
+            triggeredFlags: categoryResult.flags,
             name: name.trim(),
             phone: phone.trim()
         });
@@ -93,12 +145,15 @@ function GlpTestPage() {
         return <ResultPage result={result} />;
     }
 
-    const progress = ((currentQuestionIndex + 1) / questionsConfig.length) * 100;
+    // Calculate total questions that will be shown
+    const totalQuestionsToShow = questionsConfig.filter((_, index) => shouldShowQuestion(index)).length;
+    const answeredCount = Object.keys(answers).length;
+    const progress = ((answeredCount + 1) / (totalQuestionsToShow + 1)) * 100; // +1 for contact form
 
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>⭐ GLP-1 360™️ RISK SCORE TEST</h1>
+                <h1 style={styles.title}> GLP-1 360™️ RISK SCORE TEST</h1>
                 <p style={styles.subtitle}>Answer each question to receive your personalized category</p>
 
                 <div style={styles.progressBar}>

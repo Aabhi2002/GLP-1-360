@@ -39,9 +39,69 @@ export function applyOverrides(baseCategory, flags, overrideCategories) {
     return baseCategory;
 }
 
-export function getFinalCategory(score, flags, overrideCategories) {
+export function checkOverrideFlags(answers, questionsConfig) {
+    // Check Q12, Q13, Q14 for override flags
+    const overrideQuestions = ['q12', 'q13', 'q14'];
+
+    for (const qId of overrideQuestions) {
+        const answer = answers[qId];
+        if (!answer || !Array.isArray(answer)) continue;
+
+        const question = questionsConfig.find(q => q.id === qId);
+        if (!question) continue;
+
+        // Check if any option is selected (not just "None")
+        const noneOption = question.options.find(opt => opt.label === "None");
+        const hasNonNoneSelection = answer.some(optionId => optionId !== noneOption?.id);
+
+        if (hasNonNoneSelection) {
+            // Get the selected flag labels
+            const selectedFlags = answer
+                .filter(optionId => optionId !== noneOption?.id)
+                .map(optionId => {
+                    const option = question.options.find(opt => opt.id === optionId);
+                    return option ? option.label : '';
+                })
+                .filter(Boolean);
+
+            return {
+                isOverride: true,
+                category: "GLP-1 360: EXIT™️",
+                triggeredBy: qId,
+                flags: selectedFlags
+            };
+        }
+    }
+
+    return {
+        isOverride: false,
+        category: null,
+        triggeredBy: null,
+        flags: []
+    };
+}
+
+export function getFinalCategory(score, answers, questionsConfig) {
+    // First check for override flags
+    const override = checkOverrideFlags(answers, questionsConfig);
+
+    if (override.isOverride) {
+        return {
+            category: override.category,
+            isOverride: true,
+            triggeredBy: override.triggeredBy,
+            flags: override.flags
+        };
+    }
+
+    // If no override, use score-based category
     const baseCategory = getBaseCategory(score);
-    return applyOverrides(baseCategory, flags, overrideCategories);
+    return {
+        category: baseCategory,
+        isOverride: false,
+        triggeredBy: null,
+        flags: []
+    };
 }
 
 export function getCategoryExplanation(category) {

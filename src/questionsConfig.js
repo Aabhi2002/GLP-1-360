@@ -144,5 +144,49 @@ export const questionsConfig = [
             { id: "q11_f", label: "Prepare to stop GLP-1", score: 4 },
             { id: "q11_g", label: "Avoid rebound after stopping", score: 4 }
         ]
+    },
+    // Additional Assessment Questions
+    {
+        id: "q12",
+        section: "SECTION F — ADDITIONAL ASSESSMENT",
+        question: "Select if applicable:",
+        type: "multi",
+        isOverride: true,
+        overrideCategory: "EXIT",
+        options: [
+            { id: "q12_a", label: "Appetite < 600 kcal/day", score: 0 },
+            { id: "q12_b", label: "Planning to stop GLP-1 within 30 days", score: 0 },
+            { id: "q12_c", label: "Already regained > 3 kg after stopping", score: 0 },
+            { id: "q12_d", label: "None", score: 0 }
+        ]
+    },
+    {
+        id: "q13",
+        section: "SECTION F — ADDITIONAL ASSESSMENT",
+        question: "Select if applicable:",
+        type: "multi",
+        isOverride: true,
+        overrideCategory: "EXIT",
+        options: [
+            { id: "q13_a", label: "Muscle loss > 1.5–2.0 kg on BCA", score: 0 },
+            { id: "q13_b", label: "Plateau > 4 weeks", score: 0 },
+            { id: "q13_c", label: "Persistent weakness", score: 0 },
+            { id: "q13_d", label: "Moderate gut issues", score: 0 },
+            { id: "q13_e", label: "None", score: 0 }
+        ]
+    },
+    {
+        id: "q14",
+        section: "SECTION F — ADDITIONAL ASSESSMENT",
+        question: "Select if applicable:",
+        type: "multi",
+        isOverride: true,
+        overrideCategory: "EXIT",
+        options: [
+            { id: "q14_a", label: "Completely new starter", score: 0 },
+            { id: "q14_b", label: "No side effects", score: 0 },
+            { id: "q14_c", label: "Normal strength levels", score: 0 },
+            { id: "q14_d", label: "None", score: 0 }
+        ]
     }
 ];

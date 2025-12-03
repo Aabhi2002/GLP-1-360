@@ -5,7 +5,7 @@ import { questionsConfig } from './questionsConfig';
 const GOOGLE_SCRIPT_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
 
 function ResultPage({ result }) {
-    const { totalScore, finalCategory, answers, name, phone } = result;
+    const { totalScore, finalCategory, answers, name, phone, isOverride, triggeredFlags } = result;
     const explanation = getCategoryExplanation(finalCategory);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -147,7 +147,7 @@ function ResultPage({ result }) {
             <div style={styles.planCard}>
                 <div style={styles.planHeader}>
                     <h2 style={styles.planTitle}>
-                        <span style={styles.planIcon}>🎯</span>
+                        <span style={styles.planIcon}></span>
                         Your Recommended Action Plan
                     </h2>
                     <p style={styles.planSubtitle}>
