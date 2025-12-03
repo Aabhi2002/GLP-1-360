@@ -5,7 +5,7 @@ import { questionsConfig } from './questionsConfig';
 const GOOGLE_SCRIPT_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
 
 function ResultPage({ result }) {
-    const { totalScore, finalCategory, answers, name, phone, isOverride, triggeredFlags } = result;
+    const { totalScore, finalCategory, answers, name, phone, isOverride, triggeredFlags, contactRequested } = result;
     const explanation = getCategoryExplanation(finalCategory);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -45,6 +45,7 @@ function ResultPage({ result }) {
                 timestamp: new Date().toISOString(),
                 name: name,
                 phone: phone,
+                contactRequested: contactRequested ? 'Yes' : 'No',
                 ...answersData,
                 totalScore: totalScore,
                 baseCategory: result.baseCategory,
@@ -78,10 +79,10 @@ function ResultPage({ result }) {
     const colors = getCategoryColor();
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} className="result-container">
             {/* Hero Section */}
-            <div style={{ ...styles.heroCard, backgroundColor: colors.bg, borderColor: colors.border }}>
-                <div style={styles.heroContent}>
+            <div style={{ ...styles.heroCard, backgroundColor: colors.bg, borderColor: colors.border }} className="hero-card">
+                <div style={styles.heroContent} className="hero-content">
                     <div style={styles.iconBadge}>{colors.icon}</div>
                     <div style={styles.heroText}>
                         <h1 style={{ ...styles.heroTitle, color: colors.text }}>
@@ -107,7 +108,7 @@ function ResultPage({ result }) {
                     {explanation.subtitle}
                 </h2>
 
-                <div style={styles.analysisGrid}>
+                <div style={styles.analysisGrid} className="analysis-grid">
                     <div style={styles.analysisBox}>
                         <h3 style={styles.analysisTitle}>
                             <span style={styles.emoji}>🔍</span> What This Means
@@ -273,10 +274,21 @@ function ResultPage({ result }) {
 
                 <div style={styles.planCTA}>
                     <div style={styles.ctaContent}>
-                        <h3 style={styles.ctaTitle}>Ready to Start Your Journey?</h3>
-                        <p style={styles.ctaText}>
-                            Our team will contact you at <strong>{phone}</strong> to discuss your personalized plan and next steps.
-                        </p>
+                        {contactRequested ? (
+                            <>
+                                <h3 style={styles.ctaTitle}>Ready to Start Your Journey?</h3>
+                                <p style={styles.ctaText}>
+                                    Our team will contact you at <strong>{phone}</strong> to discuss your personalized plan and next steps.
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <h3 style={styles.ctaTitle}>Start Your Journey Independently</h3>
+                                <p style={styles.ctaText}>
+                                    You've chosen to proceed on your own. Follow the action plan above to achieve your goals. Good luck on your journey!
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -286,7 +298,7 @@ function ResultPage({ result }) {
                 <div style={styles.confirmationIcon}>✓</div>
                 <h3 style={styles.confirmationTitle}>Results Submitted Successfully</h3>
                 <p style={styles.confirmationText}>
-                    Thank you, <strong>{name}</strong>! Your assessment has been saved and our specialists will review your results shortly.
+                    Thank you, <strong>{name}</strong>! Your assessment has been saved{contactRequested ? ' and our specialists will review your results shortly' : '. You can start your journey using the action plan above'}.
                 </p>
                 {isSubmitting && (
                     <p style={styles.submittingText}>Submitting your results...</p>
@@ -303,7 +315,10 @@ const styles = {
         padding: '20px',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         backgroundColor: '#f5f7fa',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        '@media (max-width: 768px)': {
+            padding: '15px'
+        }
     },
     heroCard: {
         padding: '25px 30px',
@@ -311,13 +326,17 @@ const styles = {
         boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
         marginBottom: '30px',
         border: '3px solid',
-        animation: 'fadeIn 0.5s ease-in'
+        animation: 'fadeIn 0.5s ease-in',
+        '@media (max-width: 768px)': {
+            padding: '20px 15px'
+        }
     },
     heroContent: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '25px'
+        gap: '25px',
+        flexWrap: 'wrap'
     },
     iconBadge: {
         fontSize: '70px',
@@ -352,7 +371,10 @@ const styles = {
         padding: '35px',
         borderRadius: '16px',
         boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
-        marginBottom: '30px'
+        marginBottom: '30px',
+        '@media (max-width: 768px)': {
+            padding: '25px 20px'
+        }
     },
     sectionTitle: {
         fontSize: '26px',
@@ -368,7 +390,7 @@ const styles = {
     },
     analysisGrid: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
         gap: '25px',
         marginBottom: '25px'
     },
@@ -441,7 +463,10 @@ const styles = {
         background: 'linear-gradient(135deg, #2c5aa0 0%, #1e3a6f 100%)',
         padding: '35px 30px',
         textAlign: 'center',
-        color: '#fff'
+        color: '#fff',
+        '@media (max-width: 768px)': {
+            padding: '25px 20px'
+        }
     },
     planTitle: {
         fontSize: '32px',
@@ -450,7 +475,11 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '12px'
+        gap: '12px',
+        flexWrap: 'wrap',
+        '@media (max-width: 768px)': {
+            fontSize: '24px'
+        }
     },
     planIcon: {
         fontSize: '36px'
@@ -461,7 +490,10 @@ const styles = {
         margin: '0'
     },
     planContent: {
-        padding: '35px 30px'
+        padding: '35px 30px',
+        '@media (max-width: 768px)': {
+            padding: '25px 15px'
+        }
     },
     planStep: {
         display: 'flex',
@@ -472,7 +504,10 @@ const styles = {
         borderRadius: '12px',
         border: '2px solid #e9ecef',
         transition: 'transform 0.2s, box-shadow 0.2s',
-        cursor: 'default'
+        cursor: 'default',
+        '@media (max-width: 768px)': {
+            padding: '15px'
+        }
     },
     stepNumber: {
         width: '50px',
@@ -557,7 +592,10 @@ const styles = {
         borderRadius: '16px',
         boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
         textAlign: 'center',
-        border: '2px solid #4caf50'
+        border: '2px solid #4caf50',
+        '@media (max-width: 768px)': {
+            padding: '25px 20px'
+        }
     },
     confirmationIcon: {
         width: '70px',

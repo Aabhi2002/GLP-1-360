@@ -8,6 +8,7 @@ function GlpTestPage() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const [contactRequested, setContactRequested] = useState(true); // Default to true
     const [showContactForm, setShowContactForm] = useState(false);
     const [result, setResult] = useState(null);
 
@@ -137,7 +138,8 @@ function GlpTestPage() {
             triggeredBy: categoryResult.triggeredBy,
             triggeredFlags: categoryResult.flags,
             name: name.trim(),
-            phone: phone.trim()
+            phone: phone.trim(),
+            contactRequested: contactRequested
         });
     };
 
@@ -261,6 +263,20 @@ function GlpTestPage() {
                                 style={styles.textInput}
                                 required
                             />
+                        </div>
+
+                        <div style={styles.checkboxGroup}>
+                            <label style={styles.checkboxLabel}>
+                                <input
+                                    type="checkbox"
+                                    checked={contactRequested}
+                                    onChange={(e) => setContactRequested(e.target.checked)}
+                                    style={styles.checkbox}
+                                />
+                                <span style={styles.checkboxText}>
+                                    I want your team to contact me to discuss my personalized plan
+                                </span>
+                            </label>
                         </div>
                     </div>
 
@@ -465,6 +481,33 @@ const styles = {
         transition: 'all 0.3s ease',
         boxSizing: 'border-box',
         backgroundColor: '#f8f9fa'
+    },
+    checkboxGroup: {
+        marginTop: '20px',
+        padding: '20px',
+        backgroundColor: '#e8f5e9',
+        borderRadius: '10px',
+        border: '2px solid #4caf50'
+    },
+    checkboxLabel: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '12px',
+        cursor: 'pointer'
+    },
+    checkbox: {
+        width: '20px',
+        height: '20px',
+        cursor: 'pointer',
+        accentColor: '#2c5aa0',
+        marginTop: '2px',
+        flexShrink: 0
+    },
+    checkboxText: {
+        fontSize: '16px',
+        color: '#2e7d32',
+        lineHeight: '1.5',
+        fontWeight: '500'
     }
 };
 

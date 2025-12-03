@@ -153,3 +153,46 @@ lan Highlight Glow Effect */
         text-align: center !important;
     }
 }
+
+/* Mobil
+e Responsive Styles for ResultPage */
+@media (max-width: 768px) {
+
+    /* Hero Section */
+    .hero-card {
+        padding: 20px 15px !important;
+    }
+
+    /* Analysis Grid - Stack on mobile */
+    .analysis-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* Plan steps - Stack on mobile */
+    .plan-step {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .step-number {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Extra small screens - reduce font sizes */
+    h1 {
+        font-size: 22px !important;
+    }
+
+    h2 {
+        font-size: 20px !important;
+    }
+
+    h3 {
+        font-size: 18px !important;
+    }
+}
